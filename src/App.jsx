@@ -233,7 +233,6 @@ function BuildingMark({ size = "md" }) {
   const map = {
     xs: {
       wrap: "w-7 h-7",
-      stroke: "stroke-[1.8]",
       base: "w-7",
       frontW: "w-[10px]",
       frontH: "h-[14px]",
@@ -248,7 +247,6 @@ function BuildingMark({ size = "md" }) {
     },
     sm: {
       wrap: "w-8 h-8",
-      stroke: "stroke-[1.9]",
       base: "w-8",
       frontW: "w-[11px]",
       frontH: "h-[16px]",
@@ -263,7 +261,6 @@ function BuildingMark({ size = "md" }) {
     },
     md: {
       wrap: "w-10 h-10",
-      stroke: "stroke-[2]",
       base: "w-10",
       frontW: "w-[13px]",
       frontH: "h-[19px]",
@@ -327,6 +324,40 @@ function BizRankerWordmark({ size = "md" }) {
   );
 }
 
+function Chevron({ open }) {
+  return (
+    <span
+      className={`inline-flex items-center justify-center text-slate-300 transition-transform duration-200 ${
+        open ? "rotate-90" : ""
+      }`}
+    >
+      <ChevronRight className="h-4 w-4" />
+    </span>
+  );
+}
+
+function ExpandableSection({ title, subtitle, children, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/5">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left"
+      >
+        <div>
+          <div className="text-sm font-semibold text-white">{title}</div>
+          {subtitle ? <div className="mt-1 text-xs text-slate-400">{subtitle}</div> : null}
+        </div>
+        <Chevron open={open} />
+      </button>
+
+      {open ? <div className="border-t border-white/10 px-4 py-4">{children}</div> : null}
+    </div>
+  );
+}
+
 function Hero({ onLogin, loginError }) {
   const [username, setUsername] = useState("investor");
   const [password, setPassword] = useState("demo123");
@@ -338,9 +369,7 @@ function Hero({ onLogin, loginError }) {
 
   return (
     <div className="relative min-h-screen overflow-hidden text-white">
-
-	<div className="absolute inset-0 bg-gradient-to-br from-[#0a0f2c] via-[#0c1633] to-[#0a1a3a]" />
-
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f2c] via-[#0c1633] to-[#0a1a3a]" />
       <div className="absolute inset-0 bg-slate-950/72" />
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-slate-950/82 to-indigo-950/60" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.16),transparent_30%)]" />
@@ -385,31 +414,23 @@ function Hero({ onLogin, loginError }) {
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
-              BizRanker transforms public business registry data into a scored
-              acquisition marketplace by sourcing, enriching, ranking, and
-              packaging aged corporate opportunities for sophisticated buyers,
-              advisors, and investors.
+              BizRanker transforms public business registry data into a scored acquisition marketplace
+              by sourcing, enriching, ranking, and packaging aged corporate opportunities for
+              sophisticated buyers, advisors, and investors.
             </p>
-
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               <div className="rounded-3xl border border-white/10 bg-black/25 p-5 backdrop-blur-md">
                 <div className="text-3xl font-semibold text-white">9</div>
-                <div className="mt-1 text-sm text-slate-300">
-                  No-income-tax states in rollout
-                </div>
+                <div className="mt-1 text-sm text-slate-300">No-income-tax states in rollout</div>
               </div>
               <div className="rounded-3xl border border-white/10 bg-black/25 p-5 backdrop-blur-md">
                 <div className="text-3xl font-semibold text-white">4x</div>
-                <div className="mt-1 text-sm text-slate-300">
-                  Monetization lanes beyond entity sale
-                </div>
+                <div className="mt-1 text-sm text-slate-300">Monetization lanes beyond entity sale</div>
               </div>
               <div className="rounded-3xl border border-white/10 bg-black/25 p-5 backdrop-blur-md">
                 <div className="text-3xl font-semibold text-white">24/7</div>
-                <div className="mt-1 text-sm text-slate-300">
-                  Automated discovery and scoring flow
-                </div>
+                <div className="mt-1 text-sm text-slate-300">Automated discovery and scoring flow</div>
               </div>
             </div>
           </motion.div>
@@ -432,9 +453,7 @@ function Hero({ onLogin, loginError }) {
 
               <form onSubmit={submit} className="space-y-4">
                 <div>
-                  <label className="mb-2 block text-sm text-slate-200">
-                    Username
-                  </label>
+                  <label className="mb-2 block text-sm text-slate-200">Username</label>
                   <input
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -444,9 +463,7 @@ function Hero({ onLogin, loginError }) {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm text-slate-200">
-                    Password
-                  </label>
+                  <label className="mb-2 block text-sm text-slate-200">Password</label>
                   <input
                     type="password"
                     value={password}
@@ -513,29 +530,304 @@ function Hero({ onLogin, loginError }) {
   );
 }
 
+function DetailSummaryCards({ selected }) {
+  return (
+    <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
+        <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Score</div>
+        <div className="mt-2 text-3xl font-semibold">{selected.score}</div>
+      </div>
+      <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
+        <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Est. Value</div>
+        <div className="mt-2 text-[1.28rem] leading-tight font-semibold whitespace-nowrap">
+          {selected.estimatedValue}
+        </div>
+      </div>
+      <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
+        <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Age</div>
+        <div className="mt-2 text-2xl font-semibold whitespace-nowrap">{selected.age} years</div>
+      </div>
+      <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
+        <div className="text-xs uppercase tracking-[0.2em] text-slate-500">Readiness</div>
+        <div className={`mt-2 text-2xl font-semibold ${readinessClass(selected.readiness)}`}>
+          {selected.readiness}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DetailCore({ selected, mobile = false }) {
+  return (
+    <>
+      <div className={`rounded-3xl border border-slate-800 bg-slate-900/80 ${mobile ? "p-4" : "p-5"}`}>
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h4 className={`${mobile ? "text-[1.2rem]" : "text-[1.65rem]"} leading-tight font-semibold break-words`}>
+              {selected.name}
+            </h4>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              {selected.state} • {selected.industry} • {selected.status}
+            </p>
+          </div>
+          <span
+            className={`inline-block shrink-0 min-w-[88px] text-center rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap ${tierClass(
+              selected.tier
+            )}`}
+          >
+            {selected.tier}
+          </span>
+        </div>
+
+        <DetailSummaryCards selected={selected} />
+      </div>
+    </>
+  );
+}
+
+function DesktopEntityDetail({ selected }) {
+  return (
+    <div className="min-w-0 rounded-3xl border border-slate-800 bg-slate-950/70 p-6 text-white shadow-xl">
+      <h3 className="text-2xl font-semibold">Entity Detail</h3>
+      <p className="mt-1 text-slate-400">
+        Investor-facing snapshot of value, signals, and next-step services.
+      </p>
+
+      {selected && (
+        <div className="mt-6 max-h-[720px] overflow-y-auto pr-2">
+          <DetailCore selected={selected} />
+
+          <div className="mt-5">
+            <h5 className="mb-3 text-sm uppercase tracking-[0.22em] text-slate-500">
+              Scoring Signals
+            </h5>
+            <div className="space-y-3">
+              {signals.map((s) => (
+                <div
+                  key={s.label}
+                  className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900 p-4"
+                >
+                  <div className="text-sm text-slate-300">{s.label}</div>
+                  <div className="font-semibold text-white">{s.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="my-6 h-px bg-slate-800" />
+
+          <div>
+            <h5 className="mb-3 text-sm uppercase tracking-[0.22em] text-slate-500">
+              Associated Products & Services
+            </h5>
+            <div className="space-y-3">
+              {services.slice(0, 3).map((service) => {
+                const Icon = service.icon;
+                return (
+                  <div
+                    key={service.title}
+                    className="rounded-2xl border border-slate-800 bg-slate-900 p-4"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-2xl border border-slate-800 bg-slate-950 p-2.5">
+                        <Icon className="h-4 w-4 text-indigo-300" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-white">{service.title}</div>
+                        <div className="mt-1 text-sm leading-6 text-slate-400">
+                          {service.description}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-3xl border border-indigo-500/20 bg-indigo-500/10 p-5">
+            <div className="text-sm uppercase tracking-[0.24em] text-indigo-300">
+              Suggested Next Action
+            </div>
+            <div className="mt-2 text-lg font-semibold">
+              Initiate acquisition workflow + premium advisory packaging
+            </div>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              This entity is a strong candidate for premium packaging: ranked opportunity listing,
+              advisory outreach, protection strategy, and investor-aligned concierge support.
+            </p>
+            <button className="mt-4 flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-500">
+              Open Deal Workflow
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MobileEntityCard({ entity, isOpen, onToggle }) {
+  return (
+    <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-4 text-white shadow-xl">
+      <button type="button" onClick={onToggle} className="w-full text-left">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="text-lg font-semibold leading-tight text-white">{entity.name}</div>
+            <div className="mt-2 text-sm text-slate-400">
+              {entity.state} • {entity.industry} • {entity.status}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span
+              className={`inline-block shrink-0 min-w-[80px] text-center rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap ${tierClass(
+                entity.tier
+              )}`}
+            >
+              {entity.tier}
+            </span>
+            <Chevron open={isOpen} />
+          </div>
+        </div>
+
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 px-3 py-3">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Score</div>
+            <div className="mt-1 text-lg font-semibold text-white">{entity.score}</div>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 px-3 py-3">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Age</div>
+            <div className="mt-1 text-lg font-semibold text-white">{entity.age}y</div>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 px-3 py-3">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Price</div>
+            <div className="mt-1 text-sm font-semibold text-white">{entity.price}</div>
+          </div>
+        </div>
+      </button>
+
+      {isOpen && (
+        <div className="mt-4 space-y-3 border-t border-slate-800 pt-4">
+          <DetailCore selected={entity} mobile />
+
+          <ExpandableSection
+            title="Overview"
+            subtitle="Value, readiness, and positioning summary"
+            defaultOpen
+          >
+            <div className="space-y-3 text-sm text-slate-300">
+              <div className="rounded-xl border border-white/10 bg-slate-950/60 px-3 py-3">
+                Estimated value band: <span className="font-semibold text-white">{entity.estimatedValue}</span>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-slate-950/60 px-3 py-3">
+                Listing price: <span className="font-semibold text-white">{entity.price}</span>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-slate-950/60 px-3 py-3">
+                Readiness profile:{" "}
+                <span className={`font-semibold ${readinessClass(entity.readiness)}`}>{entity.readiness}</span>
+              </div>
+            </div>
+          </ExpandableSection>
+
+          <ExpandableSection
+            title="Scoring Signals"
+            subtitle="Tap to review the weighted signal stack"
+          >
+            <div className="space-y-2">
+              {signals.map((s) => (
+                <div
+                  key={s.label}
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-slate-950/60 px-3 py-3 text-sm"
+                >
+                  <span className="text-slate-300">{s.label}</span>
+                  <span className="font-semibold text-white">{s.value}</span>
+                </div>
+              ))}
+            </div>
+          </ExpandableSection>
+
+          <ExpandableSection
+            title="Associated Services"
+            subtitle="Premium pathways attached to this opportunity"
+          >
+            <div className="space-y-3">
+              {services.slice(0, 3).map((service) => {
+                const Icon = service.icon;
+                return (
+                  <div
+                    key={service.title}
+                    className="rounded-xl border border-white/10 bg-slate-950/60 p-3"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-xl border border-white/10 bg-white/5 p-2.5">
+                        <Icon className="h-4 w-4 text-indigo-300" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-white">{service.title}</div>
+                        <div className="mt-1 text-sm leading-6 text-slate-400">
+                          {service.description}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </ExpandableSection>
+
+          <ExpandableSection
+            title="Next Action"
+            subtitle="Recommended move for a serious buyer"
+          >
+            <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/10 p-4">
+              <div className="text-sm uppercase tracking-[0.24em] text-indigo-300">
+                Suggested Next Action
+              </div>
+              <div className="mt-2 text-lg font-semibold">
+                Initiate acquisition workflow + premium advisory packaging
+              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-300">
+                This entity is a strong candidate for premium packaging: ranked opportunity listing,
+                advisory outreach, protection strategy, and investor-aligned concierge support.
+              </p>
+              <button className="mt-4 flex w-full items-center justify-center rounded-xl bg-indigo-600 px-4 py-3 text-white hover:bg-indigo-500">
+                Open Deal Workflow
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
+            </div>
+          </ExpandableSection>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Dashboard({ user, onLogout }) {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(entities[0].id);
   const [stateFilter, setStateFilter] = useState("All");
-
-  const selected = entities.find((e) => e.id === selectedId);
+  const [expandedMobileId, setExpandedMobileId] = useState(entities[0].id);
 
   const filtered = useMemo(() => {
     return entities.filter((e) => {
       const matchQuery =
         query.length === 0 ||
         e.name.toLowerCase().includes(query.toLowerCase()) ||
-        e.industry.toLowerCase().includes(query.toLowerCase());
+        e.industry.toLowerCase().includes(query.toLowerCase()) ||
+        e.state.toLowerCase().includes(query.toLowerCase());
 
       const matchState = stateFilter === "All" || e.state === stateFilter;
       return matchQuery && matchState;
     });
   }, [query, stateFilter]);
 
+  const selected = filtered.find((e) => e.id === selectedId) || filtered[0] || null;
+
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <div className="border-b border-slate-800 bg-slate-950/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 lg:px-10">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10">
           <div className="flex items-center gap-3 overflow-hidden">
             <BizRankerWordmark size="xs" />
             <div>
@@ -557,35 +849,34 @@ function Dashboard({ user, onLogout }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button className="flex items-center rounded-xl border border-slate-800 bg-slate-900 px-4 py-2 text-slate-200 hover:bg-slate-800 hover:text-white">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button className="hidden items-center rounded-xl border border-slate-800 bg-slate-900 px-4 py-2 text-slate-200 hover:bg-slate-800 hover:text-white sm:flex">
               <Bell className="mr-2 h-4 w-4" />
               Alerts
             </button>
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 px-4 py-2 text-sm text-slate-200">
+            <div className="hidden rounded-2xl border border-slate-800 bg-slate-900 px-4 py-2 text-sm text-slate-200 sm:block">
               {user.displayName}
             </div>
             <button
               onClick={onLogout}
-              className="flex items-center rounded-xl border border-slate-800 bg-slate-900 px-4 py-2 text-slate-200 hover:bg-slate-800 hover:text-white"
+              className="flex items-center rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 text-slate-200 hover:bg-slate-800 hover:text-white sm:px-4"
             >
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              <LogOut className="mr-0 h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-10">
         <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="text-4xl font-semibold tracking-tight">
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
               Corporate Opportunity Dashboard
             </h2>
             <p className="mt-2 max-w-3xl text-slate-400">
-              Ranked acquisition opportunities sourced from public registry
-              data and enhanced through score-driven intelligence signals,
-              pricing bands, and services alignment.
+              Ranked acquisition opportunities sourced from public registry data and enhanced
+              through score-driven intelligence signals, pricing bands, and services alignment.
             </p>
           </div>
 
@@ -627,13 +918,11 @@ function Dashboard({ user, onLogout }) {
           />
         </div>
 
-        <div className="mt-8 grid gap-6 xl:grid-cols-[1.14fr_1.36fr]">
+        <div className="mt-8 hidden gap-6 xl:grid xl:grid-cols-[1.14fr_1.36fr]">
           <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-6 text-white shadow-xl">
             <div className="mb-6 flex flex-row items-center justify-between gap-4">
               <div>
-                <h3 className="text-2xl font-semibold">
-                  Ranked Opportunity Listings
-                </h3>
+                <h3 className="text-2xl font-semibold">Ranked Opportunity Listings</h3>
                 <p className="mt-1 text-slate-400">
                   Sort by tier, age, price, and acquisition readiness.
                 </p>
@@ -656,38 +945,29 @@ function Dashboard({ user, onLogout }) {
               </div>
             </div>
 
-            <div className="mb-4 md:hidden">
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search entity or industry"
-                className="h-11 w-full rounded-xl border border-slate-800 bg-slate-900 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              />
-            </div>
-
             <div className="overflow-x-auto">
               <table className="w-full border-collapse table-auto">
                 <thead>
                   <tr className="border-b border-slate-800">
-                    <th className="px-3 py-3 text-left text-sm font-medium text-slate-400 min-w-[230px]">
+                    <th className="min-w-[230px] px-3 py-3 text-left text-sm font-medium text-slate-400">
                       Entity
                     </th>
-                    <th className="px-3 py-3 text-left text-sm font-medium text-slate-400 w-[100px] whitespace-nowrap">
+                    <th className="w-[100px] whitespace-nowrap px-3 py-3 text-left text-sm font-medium text-slate-400">
                       State
                     </th>
-                    <th className="px-3 py-3 text-left text-sm font-medium text-slate-400 w-[80px] whitespace-nowrap">
+                    <th className="w-[80px] whitespace-nowrap px-3 py-3 text-left text-sm font-medium text-slate-400">
                       Age
                     </th>
-                    <th className="px-3 py-3 text-left text-sm font-medium text-slate-400 w-[124px] whitespace-nowrap">
+                    <th className="w-[124px] whitespace-nowrap px-3 py-3 text-left text-sm font-medium text-slate-400">
                       Tier
                     </th>
-                    <th className="px-3 py-3 text-left text-sm font-medium text-slate-400 w-[78px] whitespace-nowrap">
+                    <th className="w-[78px] whitespace-nowrap px-3 py-3 text-left text-sm font-medium text-slate-400">
                       Score
                     </th>
-                    <th className="px-3 py-3 text-left text-sm font-medium text-slate-400 w-[106px] whitespace-nowrap">
+                    <th className="w-[106px] whitespace-nowrap px-3 py-3 text-left text-sm font-medium text-slate-400">
                       Price
                     </th>
-                    <th className="px-3 py-3 text-left text-sm font-medium text-slate-400 w-[98px] whitespace-nowrap">
+                    <th className="w-[98px] whitespace-nowrap px-3 py-3 text-left text-sm font-medium text-slate-400">
                       Action
                     </th>
                   </tr>
@@ -698,39 +978,37 @@ function Dashboard({ user, onLogout }) {
                       key={e.id}
                       onClick={() => setSelectedId(e.id)}
                       className={`cursor-pointer border-b border-slate-800 ${
-                        selectedId === e.id
-                          ? "bg-slate-900/80"
-                          : "hover:bg-slate-900/50"
+                        selectedId === e.id ? "bg-slate-900/80" : "hover:bg-slate-900/50"
                       }`}
                     >
-                      <td className="px-3 py-4 min-w-[230px]">
+                      <td className="min-w-[230px] px-3 py-4">
                         <div className="font-medium text-white">{e.name}</div>
                         <div className="text-xs text-slate-500">
                           {e.industry} • {e.status}
                         </div>
                       </td>
-                      <td className="px-3 py-4 w-[100px] whitespace-nowrap text-slate-300">
+                      <td className="w-[100px] whitespace-nowrap px-3 py-4 text-slate-300">
                         {e.state}
                       </td>
-                      <td className="px-3 py-4 w-[80px] whitespace-nowrap text-slate-300">
+                      <td className="w-[80px] whitespace-nowrap px-3 py-4 text-slate-300">
                         {e.age} yrs
                       </td>
-                      <td className="px-3 py-4 w-[124px] whitespace-nowrap">
+                      <td className="w-[124px] whitespace-nowrap px-3 py-4">
                         <span
-                          className={`inline-block min-w-[80px] text-center rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap ${tierClass(
+                          className={`inline-block min-w-[80px] rounded-full px-3 py-1 text-center text-xs font-medium whitespace-nowrap ${tierClass(
                             e.tier
                           )}`}
                         >
                           {e.tier}
                         </span>
                       </td>
-                      <td className="px-3 py-4 w-[78px] whitespace-nowrap text-slate-100">
+                      <td className="w-[78px] whitespace-nowrap px-3 py-4 text-slate-100">
                         {e.score}
                       </td>
-                      <td className="px-3 py-4 w-[106px] whitespace-nowrap text-slate-100">
+                      <td className="w-[106px] whitespace-nowrap px-3 py-4 text-slate-100">
                         {e.price}
                       </td>
-                      <td className="px-3 py-4 w-[98px] whitespace-nowrap">
+                      <td className="w-[98px] whitespace-nowrap px-3 py-4">
                         <button className="flex items-center rounded-xl px-3 py-2 text-indigo-300 hover:bg-indigo-500/10 hover:text-indigo-200">
                           View <ChevronRight className="ml-1 h-4 w-4" />
                         </button>
@@ -742,142 +1020,55 @@ function Dashboard({ user, onLogout }) {
             </div>
           </div>
 
-          <div className="min-w-0 rounded-3xl border border-slate-800 bg-slate-950/70 p-6 text-white shadow-xl">
-            <h3 className="text-2xl font-semibold">Entity Detail</h3>
-            <p className="mt-1 text-slate-400">
-              Investor-facing snapshot of value, signals, and next-step services.
-            </p>
+          <DesktopEntityDetail selected={selected} />
+        </div>
 
-            {selected && (
-              <div className="mt-6 max-h-[720px] overflow-y-auto pr-2">
-                <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <h4 className="text-[1.65rem] leading-tight font-semibold break-words">
-                        {selected.name}
-                      </h4>
-                      <p className="mt-2 text-sm leading-6 text-slate-400">
-                        {selected.state} • {selected.industry} • {selected.status}
-                      </p>
-                    </div>
-                    <span
-                      className={`inline-block shrink-0 min-w-[88px] text-center rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap ${tierClass(
-                        selected.tier
-                      )}`}
-                    >
-                      {selected.tier}
-                    </span>
-                  </div>
+        <div className="mt-8 xl:hidden">
+          <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-4 text-white shadow-xl sm:p-6">
+            <div className="mb-6">
+              <h3 className="text-2xl font-semibold">Ranked Opportunity Listings</h3>
+              <p className="mt-1 text-slate-400">
+                Tap any entity to expand its summary, signals, services, and next action.
+              </p>
+            </div>
 
-                  <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
-                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
-                        Score
-                      </div>
-                      <div className="mt-2 text-3xl font-semibold">
-                        {selected.score}
-                      </div>
-                    </div>
-                    <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
-                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
-                        Est. Value
-                      </div>
-                      <div className="mt-2 text-[1.28rem] leading-tight font-semibold whitespace-nowrap">
-                        {selected.estimatedValue}
-                      </div>
-                    </div>
-                    <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
-                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
-                        Age
-                      </div>
-                      <div className="mt-2 text-2xl font-semibold whitespace-nowrap">
-                        {selected.age} years
-                      </div>
-                    </div>
-                    <div className="min-w-0 rounded-2xl border border-slate-800 bg-slate-950 p-4">
-                      <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
-                        Readiness
-                      </div>
-                      <div
-                        className={`mt-2 text-2xl font-semibold ${readinessClass(
-                          selected.readiness
-                        )}`}
-                      >
-                        {selected.readiness}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="mb-4">
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search entity, industry, or state"
+                className="h-11 w-full rounded-xl border border-slate-800 bg-slate-900 px-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+            </div>
 
-                <div className="mt-5">
-                  <h5 className="mb-3 text-sm uppercase tracking-[0.22em] text-slate-500">
-                    Scoring Signals
-                  </h5>
-                  <div className="space-y-3">
-                    {signals.map((s) => (
-                      <div
-                        key={s.label}
-                        className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900 p-4"
-                      >
-                        <div className="text-sm text-slate-300">{s.label}</div>
-                        <div className="font-semibold text-white">{s.value}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <div className="mb-5 flex flex-wrap gap-2">
+              {["All", "Florida", "Texas", "Nevada", "Wyoming"].map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setStateFilter(s)}
+                  className={`rounded-xl border px-3 py-2 text-sm ${
+                    stateFilter === s
+                      ? "border-indigo-500/40 bg-indigo-600 text-white hover:bg-indigo-500"
+                      : "border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white"
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
 
-                <div className="my-6 h-px bg-slate-800" />
-
-                <div>
-                  <h5 className="mb-3 text-sm uppercase tracking-[0.22em] text-slate-500">
-                    Associated Products & Services
-                  </h5>
-                  <div className="space-y-3">
-                    {services.slice(0, 3).map((service) => {
-                      const Icon = service.icon;
-                      return (
-                        <div
-                          key={service.title}
-                          className="rounded-2xl border border-slate-800 bg-slate-900 p-4"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-2.5">
-                              <Icon className="h-4 w-4 text-indigo-300" />
-                            </div>
-                            <div>
-                              <div className="font-medium text-white">
-                                {service.title}
-                              </div>
-                              <div className="mt-1 text-sm leading-6 text-slate-400">
-                                {service.description}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="mt-6 rounded-3xl border border-indigo-500/20 bg-indigo-500/10 p-5">
-                  <div className="text-sm uppercase tracking-[0.24em] text-indigo-300">
-                    Suggested Next Action
-                  </div>
-                  <div className="mt-2 text-lg font-semibold">
-                    Initiate acquisition workflow + premium advisory packaging
-                  </div>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
-                    This entity is a strong candidate for premium packaging:
-                    ranked opportunity listing, advisory outreach, protection
-                    strategy, and investor-aligned concierge support.
-                  </p>
-                  <button className="mt-4 flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-500">
-                    Open Deal Workflow
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            )}
+            <div className="space-y-4">
+              {filtered.map((entity) => (
+                <MobileEntityCard
+                  key={entity.id}
+                  entity={entity}
+                  isOpen={expandedMobileId === entity.id}
+                  onToggle={() =>
+                    setExpandedMobileId((prev) => (prev === entity.id ? null : entity.id))
+                  }
+                />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -906,9 +1097,7 @@ function Dashboard({ user, onLogout }) {
                     <Icon className="h-5 w-5 text-indigo-300" />
                   </div>
                   <div className="text-lg font-semibold">{s.title}</div>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">
-                    {s.description}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">{s.description}</p>
                   <button className="mt-4 flex items-center px-0 text-indigo-300 hover:text-indigo-200">
                     Explore module <ArrowRight className="ml-1 h-4 w-4" />
                   </button>
@@ -932,9 +1121,7 @@ function Dashboard({ user, onLogout }) {
                     <Icon className="h-5 w-5 text-indigo-300" />
                   </div>
                   <div className="text-lg font-semibold">{item.title}</div>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">
-                    {item.body}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">{item.body}</p>
                 </div>
               );
             })}
@@ -954,9 +1141,7 @@ function Dashboard({ user, onLogout }) {
                       className="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900 p-4"
                     >
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-indigo-300" />
-                      <p className="text-sm leading-6 text-slate-300">
-                        {bullet}
-                      </p>
+                      <p className="text-sm leading-6 text-slate-300">{bullet}</p>
                     </div>
                   ))}
                 </div>
@@ -1008,9 +1193,7 @@ function Storyboard() {
       <div className="mx-auto max-w-7xl rounded-[2rem] border border-slate-800 bg-slate-950/70 p-8 shadow-xl">
         <div className="mb-8 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="text-sm uppercase tracking-[0.26em] text-slate-500">
-              Storyboard View
-            </div>
+            <div className="text-sm uppercase tracking-[0.26em] text-slate-500">Storyboard View</div>
             <h3 className="mt-2 text-3xl font-semibold tracking-tight">
               What the product becomes when fully built out
             </h3>
@@ -1032,9 +1215,7 @@ function Storyboard() {
                   <Icon className="h-5 w-5 text-indigo-300" />
                 </div>
                 <div className="text-lg font-semibold">{page.title}</div>
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {page.text}
-                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-400">{page.text}</p>
               </div>
             );
           })}
